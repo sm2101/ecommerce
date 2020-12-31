@@ -6,20 +6,31 @@ import {LOGGED_IN_USER} from '../../Actions/types';
 import {Link} from 'react-router-dom';
 import { Button } from 'antd';
 import { GoogleOutlined} from '@ant-design/icons';
-import {createOrUpdateUser} from '../../Functions/auth'
-const Login  = ({history}) => {
-    const [email, setEmail] = useState(""),
-    [password, setPassword] = useState(""),
-    [loading, setLoading] = useState(false),
-    {user} = useSelector((state) => ({...state}));
-    const dispatch = useDispatch()
+import {createOrUpdateUser} from '../../Functions/auth';
+
+
+const Login  = ( { history } ) => {
+    const [email, setEmail]       = useState(""),
+          [password, setPassword] = useState(""),
+          [loading, setLoading]   = useState(false),
+          {user}                  = useSelector((state) => (
+              {...state}
+          )),
+          dispatch                = useDispatch();
+
     const googleLogin = async () =>{
+        
         setLoading(true);
-        auth.signInWithPopup(googleAuthProvider).then(async (res)=>{
-            setLoading(false)
+
+        auth.signInWithPopup(googleAuthProvider)
+        .then(async (res)=>{
+            setLoading(false);
+
             const {user} = res;
-            await user.getIdTokenResult().then((r)=>{
-                createOrUpdateUser(r.token).then((res)=>{
+            await user.getIdTokenResult()
+            .then((r)=>{
+                createOrUpdateUser(r.token)
+                .then((res)=>{
                     dispatch({
                         type:LOGGED_IN_USER,
                         payload:{
@@ -28,34 +39,39 @@ const Login  = ({history}) => {
                           token: r.token,
                           _id:res.data._id
                         }
-                      });
-                   }).catch(err =>{
+                    });
+                }).catch(err =>{
                        console.log(err);
-                   })
-                   history.push('/');
+                })
+                history.push('/');
             })
             
         }).catch(err =>{
-            setLoading(false)
+            setLoading(false);
             console.log(err);
             toast.error(err.message);
         })
     }
+
+    // everytime component mounts
     useEffect(()=>{
         if(user && user.token){
             history.push('/');
         }
     },[user]);
-    const handleSubmit = async (e) =>{
+
+    const handleSubmit = async (e) =>{ //on form submit
+        
         e.preventDefault();
         setLoading(true);
        try{
-           const res = await auth.signInWithEmailAndPassword(email, password);
-           const {user} = res;
-           const idTokenRes = await user.getIdTokenResult();
+           const res       = await auth.signInWithEmailAndPassword(email, password),
+                {user}     = res,
+                idTokenRes = await user.getIdTokenResult();
 
-           createOrUpdateUser(idTokenRes.token).then((res)=>{
-            dispatch({
+           createOrUpdateUser(idTokenRes.token)
+           .then((res)=>{
+               dispatch({
                 type:LOGGED_IN_USER,
                 payload:{
                   name:res.data.name,
@@ -111,13 +127,17 @@ const Login  = ({history}) => {
                             <button
                             type = 'submit'
                             autoFocus
-                            className = 'btn btn-primary mt-2'>
+                            className = 'btn btn-primary mt-2'
+                            >
                                 Login
                             </button>
-                            <Link to = '/forgot/password' className = "float-end text-secondary">Forgot Password?</Link>
+                            <Link 
+                            to = '/forgot/password' 
+                            className = "float-end text-secondary"
+                            >
+                                Forgot Password?
+                            </Link>
                         </form>
-                       
-                        
                     </div>
                 </div>
             </div>
