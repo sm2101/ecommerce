@@ -5,7 +5,6 @@ exports.authCheck = async (req,res,callBack)=>{
     try{
         const usr = await admin.auth().verifyIdToken(req.headers.authtoken);
         req.user = usr;
-        callBack();
     }catch(err){
         res.status(401).json({
             err:'Inavlid or Expired Token'

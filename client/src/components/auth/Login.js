@@ -6,15 +6,7 @@ import {LOGGED_IN_USER} from '../../Actions/types';
 import {Link} from 'react-router-dom';
 import { Button } from 'antd';
 import { GoogleOutlined} from '@ant-design/icons';
-import axios from 'axios';
-
-const createOrUpdateUser = async (authToken) =>{
-    return await axios.post(`${process.env.REACT_APP_API}/createUser`,{},{
-        headers:{
-            authToken
-        }
-    })
-}
+import {createOrUpdateUser} from '../../Functions/auth'
 const Login  = ({history}) => {
     const [email, setEmail] = useState(""),
     [password, setPassword] = useState(""),
@@ -26,21 +18,23 @@ const Login  = ({history}) => {
         auth.signInWithPopup(googleAuthProvider).then(async (res)=>{
             setLoading(false)
             const {user} = res;
-            const idTokenRes = await user.getIdTokenResult()
-            createOrUpdateUser(idTokenRes.token).then((res)=>{
-                dispatch({
-                    type:LOGGED_IN_USER,
-                    payload:{
-                      name:res.data.name,
-                      email:res.data.email,
-                      token: idTokenRes.token,
-                      _id:res.data._id
-                    }
-                  });
-               }).catch(err =>{
-                   console.log(err);
-               })
-               history.push('/');
+            await user.getIdTokenResult().then((r)=>{
+                createOrUpdateUser(r.token).then((res)=>{
+                    dispatch({
+                        type:LOGGED_IN_USER,
+                        payload:{
+                          name:res.data.name,
+                          email:res.data.email,
+                          token: r.token,
+                          _id:res.data._id
+                        }
+                      });
+                   }).catch(err =>{
+                       console.log(err);
+                   })
+                   history.push('/');
+            })
+            
         }).catch(err =>{
             setLoading(false)
             console.log(err);

@@ -9,15 +9,25 @@ exports.createUpdateUser = async (req,res) =>{
     },{
         new:true
     }).then((result)=>{
+        console.log(result);
         if(result){
-            res.status(200).json(result)
+            res.json(result);
         } else {
             const newUsr = new User({
                 email,
                 name,
                 picture
             }).save();
-            res.status(200).json(newUsr);
+            res.json(newUsr);
         }  
+    }).catch(err =>{
+        console.log(err);
+    })
+}
+exports.currentUser = async(req,res)=>{
+    await User.findOne({email:req.user.email}).then((r) =>{
+        res.json(r);
+    }).catch(err =>{
+        console.log(err);
     })
 }

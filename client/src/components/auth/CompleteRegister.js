@@ -2,16 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { auth} from '../../firebase';
 import {toast} from 'react-toastify';
 import {useDispatch,useSelector} from 'react-redux';
-import axios from 'axios';
+import {createOrUpdateUser} from '../../Functions/auth'
 import {LOGGED_IN_USER} from '../../Actions/types'
 
-const createOrUpdateUser = async (authToken) =>{
-    return await axios.post(`${process.env.REACT_APP_API}/createUser`,{},{
-        headers:{
-            authToken
-        }
-    })
-}
 
 const CompleteRegister =({history})=>{
     const [email,setEmail] = useState(''),
