@@ -20,8 +20,11 @@ const usrSchema = new Schema({
         default:[]
     },
     address:{
-        type:string
+        type:String
     },
+    picture:{
+        type:String
+    }
     // wishlist: [{type:ObjectId,ref:"Product"}]
 },
 {timestamps:true}

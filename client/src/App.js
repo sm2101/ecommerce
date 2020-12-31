@@ -3,7 +3,7 @@ import {useEffect} from 'react';
 import {Switch,Route} from 'react-router-dom';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
-import CompleteRegister from './components/auth/completeRegister';
+import CompleteRegister from './components/auth/CompleteRegister';
 import Landing from './components/Landing';
 import Navbar from './components/Nav/Navbar';
 import {ToastContainer} from 'react-toastify';
