@@ -53,7 +53,7 @@ const Navbar = () => {
                   </>
                 )}
                 {user && (
-                  <SubMenu title={user.email} className = "float-end">
+                  <SubMenu title={user.name?user.name:user.email} className = "float-end">
                     <Menu.Item key="setting:1"><Link to ='/user/history'>History</Link></Menu.Item>
                     <Menu.Item key="setting:2"><Link to ='/user/password'>Change Password</Link></Menu.Item>
                     <Menu.Item key="setting:3"><Link to ='/user/wishlist'>Wishlist</Link></Menu.Item>
