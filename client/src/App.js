@@ -13,6 +13,11 @@ import {useDispatch} from 'react-redux';
 import {LOGGED_IN_USER} from './Actions/types'
 import ForgotPassword from './components/auth/ForgotPassword';
 import {currentUser} from './Functions/auth'
+import History from './components/user/History';
+import Password from './components/user/Password';
+import Wishlist from './components/user/Wishlist';
+import UserRoute from './components/private_routes/UserRoute'
+
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -50,6 +55,9 @@ const App = () => {
         <Route exact path = '/register' component = {Register} />
         <Route exact path = '/register/complete' component = {CompleteRegister} />
         <Route exact path = '/forgot/password' component = {ForgotPassword} />
+        <UserRoute exact path = '/user/history' component = {History} />
+        <UserRoute exact path = '/user/wishlist' component = {Wishlist} />
+        <UserRoute exact path = '/user/password' component = {Password} />
       </Switch>
     </>
   );

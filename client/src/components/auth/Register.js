@@ -41,7 +41,7 @@ const Register =({history}) => {
                             className = "form-control" 
                             name = 'email' 
                             value = {email} 
-                            onChange = {setEmail(e => e.target.value)}
+                            onChange = {e =>setEmail(e.target.value)}
                             placeholder = "Email"
                             autoFocus
                             />

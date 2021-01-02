@@ -34,12 +34,12 @@ const Navbar = () => {
                 </Menu.Item>
                 <SubMenu title="Shop" icon = {<ShoppingOutlined />}>
                   <Menu.ItemGroup title="Item 1">
-                    <Menu.Item key="setting:1">Option 1</Menu.Item>
-                    <Menu.Item key="setting:2">Option 2</Menu.Item>
+                    <Menu.Item key="shop-item-1">Option 1</Menu.Item>
+                    <Menu.Item key="shop-item-2">Option 2</Menu.Item>
                   </Menu.ItemGroup>
                   <Menu.ItemGroup title="Item 2">
-                    <Menu.Item key="setting:3">Option 3</Menu.Item>
-                    <Menu.Item key="setting:4">Option 4</Menu.Item>
+                    <Menu.Item key="shop-item-3">Option 3</Menu.Item>
+                    <Menu.Item key="shop-item-4">Option 4</Menu.Item>
                   </Menu.ItemGroup>
                 </SubMenu>
                 {!user && (
@@ -54,8 +54,10 @@ const Navbar = () => {
                 )}
                 {user && (
                   <SubMenu title={user.email} className = "float-end">
-                    <Menu.Item key="setting:1">Dashboard</Menu.Item>
-                    <Menu.Item key="setting:2" icon = {<LogoutOutlined />} onClick = {logout}>Logout</Menu.Item>
+                    <Menu.Item key="setting:1"><Link to ='/user/history'>History</Link></Menu.Item>
+                    <Menu.Item key="setting:2"><Link to ='/user/password'>Change Password</Link></Menu.Item>
+                    <Menu.Item key="setting:3"><Link to ='/user/wishlist'>Wishlist</Link></Menu.Item>
+                    <Menu.Item key="setting:4" icon = {<LogoutOutlined />} onClick = {logout}>Logout</Menu.Item>
                 </SubMenu>
                 )}
               </Menu>

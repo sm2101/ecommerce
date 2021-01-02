@@ -18,6 +18,15 @@ const Login  = ( { history } ) => {
           )),
           dispatch                = useDispatch();
 
+
+    const roleBasedRedirect = (res) =>{
+            if(res.data.role === "Admin"){
+                history.push("/admin/dashboard");
+            } else {
+                history.push('/')
+            }
+        }
+    
     const googleLogin = async () =>{
         
         setLoading(true);
@@ -40,10 +49,10 @@ const Login  = ( { history } ) => {
                           _id:res.data._id
                         }
                     });
+                    roleBasedRedirect(res);
                 }).catch(err =>{
                        console.log(err);
                 })
-                history.push('/');
             })
             
         }).catch(err =>{
@@ -80,10 +89,10 @@ const Login  = ( { history } ) => {
                   _id:res.data._id
                 }
               });
+              roleBasedRedirect(res);
            }).catch(err =>{
                console.log(err);
            })
-          history.push('/')
        }
        catch(err){
            console.log(err);
