@@ -2,6 +2,7 @@ const admin = require('../../firebase/index'),
 User = require('../models/user');
 
 exports.authCheck = async (req,res,callBack)=>{
+    console.log('authh check hit');
     try{
         const usr = await admin
         .auth()
@@ -16,9 +17,11 @@ exports.authCheck = async (req,res,callBack)=>{
 }
 
 exports.adminCheck = async (req,res,callBack) =>{
+    console.log('admin check hit')
     const {email} = req.user;
-    await User.findOne({email}).then(res=>{
-        if(res.role !== 'admin'){
+    await User.findOne({email}).then(result=>{
+        if(result.role !== "admin"){
+            console.log(".")
             res.status(403).json({
                 err:'Admin access denied'
             })

@@ -18,13 +18,13 @@ const CompleteRegister =({history})=>{
     const handleSubmit = async (e) =>{
         e.preventDefault();
         try {
-            const res = await auth.signInWithEmailLink(this.state.email,window.location.href);
+            const res = await auth.signInWithEmailLink(email,window.location.href);
             if(res.user.emailVerified){
                 // clear local storage
                 window.localStorage.removeItem('registerEmail');
                 // get user id token
                 let user = auth.currentUser
-                await user.updatePassword(this.state.password);
+                await user.updatePassword(password);
                 const idTokenRes = await user.getIdTokenResult();
                 createOrUpdateUser(idTokenRes.token).then((res)=>{
                     dispatch({

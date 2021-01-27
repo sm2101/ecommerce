@@ -1,17 +1,16 @@
 import firebase from "firebase/app";
 import "firebase/auth";
-const firebaseConfig = {
-    apiKey: "AIzaSyBlyqYq22gjZXbJIvlNu796D1LjLvh1v-4",
-    authDomain: "aura-26.firebaseapp.com",
-    projectId: "aura-26",
-    storageBucket: "aura-26.appspot.com",
-    messagingSenderId: "681094918831",
-    appId: "1:681094918831:web:e298f9cd90b1f4ac735a5a"
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAztyX9X8RCjhh518TOyTsYiCSeChi59F8",
+    authDomain: "ecom-42b8b.firebaseapp.com",
+    projectId: "ecom-42b8b",
+    storageBucket: "ecom-42b8b.appspot.com",
+    messagingSenderId: "859355654557",
+    appId: "1:859355654557:web:748706b812176c9e18a774"
   };
   // Initialize Firebase
-  if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
+  firebase.initializeApp(firebaseConfig);
 
 
 

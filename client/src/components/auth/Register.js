@@ -19,10 +19,10 @@ const Register =({history}) => {
             url : process.env.REACT_APP_REGISTER_REDIRECT_URL,
             handleCodeInApp : true
         }
-        await auth.sendSignInLinkToEmail(this.state.email,config).then(() =>{
+        await auth.sendSignInLinkToEmail(email,config).then(() =>{
             setLoading(false)
-            toast.success(`Email is sent to ${this.state.email}. Click the link to register`);
-            window.localStorage.setItem('registerEmail',this.state.email);
+            toast.success(`Email is sent to ${email}. Click the link to register`);
+            window.localStorage.setItem('registerEmail',email);
             setEmail('');  
         }).catch(err =>{
             toast.error(err.message);

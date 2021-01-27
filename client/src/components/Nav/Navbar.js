@@ -26,8 +26,7 @@ const Navbar = () => {
         return (
               <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal" className = "my-nav">
                 <Menu.Item key="home">
-                <img className="nav-logo" src = 'https://i.imgur.com/UxLSv9T.png'/>
-                  <span><Link to = '/'>Aura</Link></span>
+                <Link to = '/'>E-commerce</Link>
                 </Menu.Item>
                 <Menu.Item key="about">
                 <Link to = '/about'>About Us</Link>

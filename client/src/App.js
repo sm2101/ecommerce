@@ -16,7 +16,9 @@ import {currentUser} from './Functions/auth'
 import History from './components/user/History';
 import Password from './components/user/Password';
 import Wishlist from './components/user/Wishlist';
-import UserRoute from './components/private_routes/UserRoute'
+import UserRoute from './components/private_routes/UserRoute';
+import AdminRoutes from './components/private_routes/AdminRoutes';
+import Dashboard from './components/admin/Dashboard'
 
 const App = () => {
   const dispatch = useDispatch();
@@ -58,6 +60,7 @@ const App = () => {
         <UserRoute exact path = '/user/history' component = {History} />
         <UserRoute exact path = '/user/wishlist' component = {Wishlist} />
         <UserRoute exact path = '/user/password' component = {Password} />
+        <AdminRoutes exact path = '/admin/dashboard' component = {Dashboard} />
       </Switch>
     </>
   );
