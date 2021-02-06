@@ -19,7 +19,9 @@ import Wishlist from './components/user/Wishlist';
 import UserRoute from './components/private_routes/UserRoute';
 import AdminRoutes from './components/private_routes/AdminRoutes';
 import Dashboard from './components/admin/Dashboard'
-
+import CreateCategory from './components/admin/Category/CreateCategory';
+import UpdateCategory from './components/admin/Category/UpdateCategory';
+import CreateSubCat from './components/admin/SubCategory/CreateSubCat';
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -32,6 +34,7 @@ const App = () => {
               payload:{
                 name:res.data.name,
                 email:res.data.email,
+                role:res.data.role,
                 token: idTokenRes.token,
                 _id:res.data._id
               }
@@ -44,7 +47,7 @@ const App = () => {
     return () => {
       unSubscribe()
     }
-  }, [])
+  }, [dispatch])
   return (
     <>
     <div className="mx-5 my-3 my-nav">
@@ -61,6 +64,9 @@ const App = () => {
         <UserRoute exact path = '/user/wishlist' component = {Wishlist} />
         <UserRoute exact path = '/user/password' component = {Password} />
         <AdminRoutes exact path = '/admin/dashboard' component = {Dashboard} />
+        <AdminRoutes exact path = '/admin/category' component = {CreateCategory} />
+        <AdminRoutes exact path = '/admin/sub-category' component = {CreateSubCat} />
+        <AdminRoutes exact path = '/admin/category/:slug' component = {UpdateCategory} />
       </Switch>
     </>
   );

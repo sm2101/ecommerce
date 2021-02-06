@@ -12,7 +12,7 @@ export default function LoadingToRedirect() {
 
         count === 0 && history.push('/login');
         return()=>clearInterval(interval);
-    },[count])
+    },[count,history])
     return (
         <div className = 'container p-5 text-center'>
             <p>Please login to see this page</p>

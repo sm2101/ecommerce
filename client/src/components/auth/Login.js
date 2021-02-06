@@ -45,6 +45,7 @@ const Login  = ( { history } ) => {
                         payload:{
                           name:res.data.name,
                           email:res.data.email,
+                          role:res.data.role,
                           token: r.token,
                           _id:res.data._id
                         }
@@ -67,7 +68,7 @@ const Login  = ( { history } ) => {
         if(user && user.token){
             history.push('/');
         }
-    },[user]);
+    },[user,history]);
 
     const handleSubmit = async (e) =>{ //on form submit
         
@@ -85,6 +86,7 @@ const Login  = ( { history } ) => {
                 payload:{
                   name:res.data.name,
                   email:res.data.email,
+                  role:res.data.role,
                   token: idTokenRes.token,
                   _id:res.data._id
                 }

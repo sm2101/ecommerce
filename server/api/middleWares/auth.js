@@ -18,6 +18,7 @@ exports.authCheck = async (req,res,callBack)=>{
 
 exports.adminCheck = async (req,res,callBack) =>{
     console.log('admin check hit')
+    console.log(req.user);
     const {email} = req.user;
     await User.findOne({email}).then(result=>{
         if(result.role !== "admin"){
