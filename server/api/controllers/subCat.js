@@ -3,9 +3,10 @@ slugify = require('slugify');
 
 exports.create = async (req,res) =>{
     try{
-        const {name} = req.body;
+        const {name, parent} = req.body;
         const subCat = await new SubCat({
             name,
+            parent,
             slug:slugify(name)
         }).save();
         res.json(subCat)
@@ -32,10 +33,10 @@ exports.read = (req,res) =>{
     })
 };
 exports.update = (req,res) =>{
-    const {name} = req.body
+    const {name, parent} = req.body
     SubCat.findOneAndUpdate(
         {slug:req.params.slug},
-        {name,slug:slugify(name)},
+        {name,slug:slugify(name),parent},
         {new:true}
         ).then(result =>{
             res.json({
