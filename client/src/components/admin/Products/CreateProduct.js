@@ -12,6 +12,7 @@ import {
 // import {EditOutlined,DeleteOutlined} from "@ant-design/icons";
 // import { Link } from 'react-router-dom';
 import CreateProdductForm from '../../Forms/CreateProductForm';
+import FileUpload from '../../Forms/FileUpload';
 export default function CreateProduct() {
     const [loading, setLoading] = useState(""),
           [values, setValues] = useState({
@@ -81,6 +82,11 @@ export default function CreateProduct() {
             </div>
             <div className="col">
               {loading?<h3>Loading...</h3>:<h3>Create Product</h3>}
+              <FileUpload 
+              values = {values}
+              setValues = {setValues}
+              setLoading = {setLoading}
+              />
              <CreateProdductForm 
              getSubs = {getSubs} 
              handleChange = {handleChange} 

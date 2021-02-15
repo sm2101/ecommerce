@@ -63,3 +63,6 @@ html,body,#root{
 .auth-form form input:focus{
   border-bottom:2px solid rgb(103, 177, 238);
 }
+.avatar-item {
+  margin-right: 24px;
+}
