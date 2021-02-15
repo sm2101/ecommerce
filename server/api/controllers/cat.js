@@ -1,4 +1,6 @@
+const { json } = require('body-parser');
 const Cat = require('../models/category'),
+SubCat = require('../models/subCat'),
 slugify = require('slugify');
 
 exports.create = async (req,res) =>{
@@ -69,3 +71,12 @@ exports.remove = (req,res) =>{
         })
     })
 };
+
+exports.getSubs = (req,res) =>{
+    console.log("endpoint reached")
+    SubCat.find({parent:req.params.id}).then(subs =>{
+        res.json(subs)
+    }).catch(err =>{
+        console.log(err);
+    })
+}

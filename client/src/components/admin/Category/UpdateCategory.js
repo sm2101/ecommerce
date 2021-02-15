@@ -20,7 +20,7 @@ export default function UpdateCategory({history,match}) {
     useEffect(() =>{
         const slug = match.params.slug;
         loadCategory(slug);
-    },[])
+    },[match.params.slug])
     
     const {user} = useSelector(state => ({...state}));
     const handleSubmit = (e) =>{

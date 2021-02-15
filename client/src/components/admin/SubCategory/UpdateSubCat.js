@@ -32,7 +32,7 @@ export default function UpdateSubCat({history,match}) {
         const slug = match.params.slug;
         loadCategories();
         loadSubCat(slug);
-    },[])
+    },[match.params.slug])
     
     const {user} = useSelector(state => ({...state}));
     const handleSubmit = (e) =>{

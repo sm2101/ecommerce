@@ -23,6 +23,7 @@ import CreateCategory from './components/admin/Category/CreateCategory';
 import UpdateCategory from './components/admin/Category/UpdateCategory';
 import CreateSubCat from './components/admin/SubCategory/CreateSubCat';
 import UpdateSubCat from './components/admin/SubCategory/UpdateSubCat';
+import CreateProduct from "./components/admin/Products/CreateProduct";
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -69,6 +70,7 @@ const App = () => {
         <AdminRoutes exact path = '/admin/sub-category' component = {CreateSubCat} />
         <AdminRoutes exact path = '/admin/category/:slug' component = {UpdateCategory} />
         <AdminRoutes exact path = '/admin/sub-category/:slug' component = {UpdateSubCat} />
+        <AdminRoutes exact path = '/admin/product' component = {CreateProduct} />
       </Switch>
     </>
   );

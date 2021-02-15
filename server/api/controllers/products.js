@@ -16,7 +16,7 @@ exports.create = async (req,res) =>{
 };
 exports.list = async (req,res) =>{
 
-    res.json(await Cat.find({}).sort({ createdAt: -1 }).exec());
+    res.json(await Product.find({}).exec());
 
 };
 exports.read = (req,res) =>{
