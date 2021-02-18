@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-export const getAllProducts = async () =>{
-    return await axios.get(`${process.env.REACT_APP_API}/products`);
+export const getProducts = async (count) =>{
+    return await axios.get(`${process.env.REACT_APP_API}/products/${count}`);
 }
 export const getProduct = async (slug) =>{
     return await axios.get(`${process.env.REACT_APP_API}/product/${slug}`);

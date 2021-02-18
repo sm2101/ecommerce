@@ -16,18 +16,23 @@ exports.create = async (req,res) =>{
 };
 exports.list = async (req,res) =>{
 
-    res.json(await Product.find({}).exec());
+    let prod = await Product.find({})
+    .limit(parseInt(req.params.count))
+    .populate('category')
+    .populate('subCat')
+    .sort([['createdAt','desc']])
+    .exec()
+
+    res.json(prod)
 
 };
-exports.read = (req,res) =>{
-    Cat.findOne({slug:req.params.slug}).then(result =>{
-        res.json(result);
-    }).catch(err =>{
-        res.status(400).json({
-            err,
-            error:"Something wrong occured"
-        })
-    })
+exports.read = async (req,res) =>{
+    let prod = await Product.findOne({slug:req.params.slug})
+    .populate("category")
+    .populate("subCat")
+    .exec();
+
+    res.json(prod);
 };
 exports.update = (req,res) =>{
     const {name} = req.body
@@ -48,14 +53,14 @@ exports.update = (req,res) =>{
         })
 };
 exports.remove = (req,res) =>{
-    Cat.findOneAndDelete({slug:req.params.slug}).then(result =>{
+    Product.findOneAndDelete({slug:req.params.slug}).then(result =>{
         console.log(result);
         res.json(result)
     }).catch(err =>{
         console.log(err)
         res.status(400).json({
             err,
-            error:"Category deletion failed"
+            error:"Product deletion failed"
         })
     })
 };
