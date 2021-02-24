@@ -14,7 +14,7 @@ import {
 // import { Link } from 'react-router-dom';
 import UpdateProdductForm from '../../Forms/UpdateProductForm';
 import FileUpload from '../../Forms/FileUpload';
-export default function UpdateProduct({match}) {
+export default function UpdateProduct({match,history}) {
     const slug = match.params.slug;
     const [loading, setLoading] = useState(""),
           [values, setValues] = useState({
@@ -22,23 +22,28 @@ export default function UpdateProduct({match}) {
               description:"",
               price:"",
               category:"",
-              categories:[],
-              subCat:[],
               shipping:"",
               quantity:"",
               images:[],
               color:""
           }),
           [subOptions, setSubOptions] = useState([]),
-          [subDropDown, setSubDropDown] = useState(false);
+          [categories, setCategories] = useState([]),
+          [subCatIds, setSubCatIds] = useState([]);
 
     const {user} = useSelector((state) =>({...state}));
 
     const loadProduct = () =>{
         getProduct(slug).then(res =>{
-            console.log(values);
             setValues({...values, ...res.data})
-            console.log(values)
+            getCategorySubs(res.data.category._id).then(s =>{
+                setSubOptions(s.data)
+            })
+            let arr =[]
+            res.data.subCat.map(s =>{
+                arr.push(s._id)
+            })
+            setSubCatIds(prev => arr);
         }).catch(err =>{
             console.log(err);
         })
@@ -46,7 +51,7 @@ export default function UpdateProduct({match}) {
 
     const loadCategories = () =>{
         getAllCategories().then(res =>{
-            setValues({...values,  categories: res.data});
+            setCategories(res.data)
         }).catch(err =>{
             console.log(err)
         })
@@ -58,11 +63,12 @@ export default function UpdateProduct({match}) {
         setValues({...values, subCat:[] ,category:catId});
         getCategorySubs(catId).then(res =>{
             setSubOptions(res.data)
-            setSubDropDown(true);
         }).catch(err =>{
             console.log(err);
         })
-    }
+        setSubCatIds([])
+        }
+    
 
     useEffect(() =>{
         loadProduct();
@@ -73,10 +79,11 @@ export default function UpdateProduct({match}) {
     const handleSubmit = (e) =>{
         e.preventDefault();
         setLoading(true)
-        updateProduct(values,user.token).then(res =>{
+        values.subCat = subCatIds;
+        updateProduct(slug,values,user.token).then(res =>{
             console.log(res)
-            window.alert("Product updated!");
-            window.location.reload();
+            toast.success("Product updated!");
+            history.push("/admin/products")
             setLoading(false);
         }).catch(err =>{
             console.log(err);
@@ -107,9 +114,11 @@ export default function UpdateProduct({match}) {
              handleChange = {handleChange} 
              handleSubmit = {handleSubmit} 
              values = {values} 
+             categories = {categories}
              subOptions = {subOptions}
-             subDropDown = {subDropDown}
              setValues = {setValues}
+             subCatIds = {subCatIds}
+             setSubCatIds = {setSubCatIds}
              />
           </div>
           </div>

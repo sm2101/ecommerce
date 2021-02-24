@@ -34,7 +34,7 @@ const FileUpload = ({values,setValues,setLoading}) => {
             setLoading(true)
             files.forEach(f => {
                 console.log("upload started");
-                Resizer.imageFileResizer(f,720,720,'JPEG',100,0,(uri)=>{
+                Resizer.imageFileResizer(f,360,360,'JPEG',100,0,(uri)=>{
                     console.log("resize done")
                     axios.post(`${process.env.REACT_APP_API}/upload-images`,{
                         img:uri
@@ -60,10 +60,9 @@ const FileUpload = ({values,setValues,setLoading}) => {
     return (
         <>
         <div className="row">
-
             {values.images &&
           values.images.map((image) => (
-            <span className = "avatar-item">
+            <span className = "avatar-item col-2">
                 <Badge
             count="X"
             key={image.public_id}

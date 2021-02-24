@@ -5,6 +5,7 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import CompleteRegister from './components/auth/CompleteRegister';
 import Landing from './components/Landing';
+import Product from './components/Product';
 import Navbar from './components/Nav/Navbar';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -60,6 +61,7 @@ const App = () => {
     </div>
       <Switch>
         <Route exact path = '/' component = {Landing} />
+        <Route exact path = '/product/:slug' component = {Product} />
         <Route exact path = '/login' component = {Login} />
         <Route exact path = '/register' component = {Register} />
         <Route exact path = '/register/complete' component = {CompleteRegister} />

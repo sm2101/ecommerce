@@ -16,6 +16,7 @@ const ProductCard = ({product, handleRemove}) => {
         <img
           src={images && images.length ? images[0].url : "https://i1.wp.com/fremontgurdwara.org/wp-content/uploads/2020/06/no-image-icon-2.png"}
           style={{ height: "150px", objectFit: "cover" }}
+          alt="Product image"
         />
       }
       actions = {[

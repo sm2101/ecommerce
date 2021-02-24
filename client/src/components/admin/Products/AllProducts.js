@@ -49,7 +49,7 @@ export default function AllProducts() {
                 <div className="row">
                 {loading?(<h3>Loading...</h3>):(<h3>Admin Dashboard</h3>)}
                 {products.map((product) => (
-              <div key={product._id} className="col-4 pb-2">
+              <div key={product._id} className="col-12 col-md-4 col-lg-3 pb-2">
                 <ProductCard product={product} handleRemove = {handleRemove} />
               </div>
             ))}

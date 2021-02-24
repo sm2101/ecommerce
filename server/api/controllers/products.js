@@ -23,6 +23,8 @@ exports.list = async (req,res) =>{
     .sort([['createdAt','desc']])
     .exec()
 
+    console.log("ALL PRODUCTS")
+    console.log(prod)
     res.json(prod)
 
 };
@@ -34,23 +36,16 @@ exports.read = async (req,res) =>{
 
     res.json(prod);
 };
-exports.update = (req,res) =>{
-    const {name} = req.body
-    Cat.findOneAndUpdate(
-        {slug:req.params.slug},
-        {name,slug:slugify(name)},
-        {new:true}
-        ).then(result =>{
-            res.json({
-                result,
-                msg:"Category updated"
-            })
-        }).catch(err =>{
-            res.status(400).json({
-                err,
-                error:"Category update failed"
-            })
-        })
+exports.update = async (req,res) =>{
+    try{
+        if(req.body.title){
+            req.body.slug = slugify(req.body.title)
+        }
+        const updated = await Product.findOneAndUpdate({slug : req.params.slug},req.body, {new:true})
+        res.json(updated)
+    } catch (err){
+        res.status(400).json(err);
+    }
 };
 exports.remove = (req,res) =>{
     Product.findOneAndDelete({slug:req.params.slug}).then(result =>{
@@ -64,3 +59,28 @@ exports.remove = (req,res) =>{
         })
     })
 };
+
+exports.listLanding = async(req,res) =>{
+    try{
+        const {sort, order, page} = req.body;
+        const prods = await Product.find({})
+            .skip((page -1)*4)
+            .populate("category")
+            .populate("subCat")
+            .sort([[sort,order]])
+            .limit(4)
+            .exec();
+        console.log(prods)
+        res.json(prods)
+    }catch(err){
+        console.log(err)
+        res.status(400).json({
+            err,
+            Error:"Product fetching failed"
+        })
+    }
+}
+exports.productCount = async (req,res) =>{
+    let total = await Product.find({}).estimatedDocumentCount().exec();
+    res.json(total)
+}

@@ -7,23 +7,34 @@ export const getProduct = async (slug) =>{
     return await axios.get(`${process.env.REACT_APP_API}/product/${slug}`);
 }
 export const removeProduct = async (slug, authToken) =>{
-    await axios.delete(`${process.env.REACT_APP_API}/product/${slug}`,{
+    return await axios.delete(`${process.env.REACT_APP_API}/product/${slug}`,{
         headers:{
             authToken,
         }
     });
 }
 export const updateProduct = async (slug,product,authToken) =>{
-    await axios.put(`${process.env.REACT_APP_API}/product/${slug}`,product,{
+    return await axios.put(`${process.env.REACT_APP_API}/product/${slug}`,product,{
         headers:{
             authToken,
         }
     });
 }
 export const createProduct = async (product,authToken) =>{
-    await axios.post(`${process.env.REACT_APP_API}/product`,product,{
+    return await axios.post(`${process.env.REACT_APP_API}/product`,product,{
         headers:{
             authToken,
         }
     });
+}
+export const getProductsLanding = async (sort,order,page) =>{
+   return await axios.post(`${process.env.REACT_APP_API}/products`,{
+        sort,
+        order,
+        page
+    }
+    )
+}
+export const getTotalProducts = async () =>{
+    return await axios.get(`${process.env.REACT_APP_API}/products/total`);
 }

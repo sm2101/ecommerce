@@ -1,4 +1,5 @@
 const cloudinary = require('cloudinary');
+const product = require('../models/product');
 
 cloudinary.config({
     cloud_name:process.env.CLOUDINARY_NAME,

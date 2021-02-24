@@ -8,19 +8,18 @@ const UpdateProductForm = (
         handleChange,
         getSubs,
         subOptions,
-        subDropDown,
-        setValues
+        setValues,
+        categories,
+        subCatIds,
+        setSubCatIds
     }
 ) => {
     const {title,
         description,
         price,
         category,
-        categories,
-        subCat,
         shipping,
         quantity,
-        images,
         color} = values;
     return (
         <form onSubmit = {handleSubmit}>
@@ -117,25 +116,23 @@ const UpdateProductForm = (
                     id = "Category-list" 
                     className = "form-control" 
                     onChange = {getSubs}
-                    value = {category}
+                    value = {category._id}
                     >
-                        <option value = "">Select a Category</option>
                         {categories.length > 0 && categories.map((c)=>{
                             return (
-                            <option value ={c._id} key = {c._id} >{c.name}</option>
+                            <option value ={c._id} key = {c._id}>{c.name}</option>
                             )
                         })}
                     </select>
                     </div>
-                {subDropDown && (
                     <div className="form-group">
                     <label htmlFor="Sub-Category-list">Sub Categories</label>
                     <Select 
                     id = "Sub-Category-list" 
                     className = "form-control" 
                     mode = "multiple" 
-                    value = {subCat}
-                    onChange = {(value) => setValues({ ...values, subCat: value })}>
+                    value = {subCatIds}
+                    onChange = {(value) => setSubCatIds(value)}>
                         <Option value = "">Select a Category</Option>
                         {subOptions.length > 0 && subOptions.map((s)=>{
                             return (
@@ -143,7 +140,7 @@ const UpdateProductForm = (
                             )
                         })}
                     </Select>
-                </div>)}
+                </div>
                   <button className="btn btn-outline-info mt-2">Save</button>
               </form>
     )

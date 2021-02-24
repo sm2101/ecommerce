@@ -66,3 +66,7 @@ html,body,#root{
 .avatar-item {
   margin-right: 24px;
 }
+
+.card-action-text{
+  font-size: x-small;
+}

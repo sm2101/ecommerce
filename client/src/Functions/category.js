@@ -7,21 +7,21 @@ export const getCategory = async (slug) =>{
     return await axios.get(`${process.env.REACT_APP_API}/category/${slug}`);
 }
 export const removeCategory = async (slug, authToken) =>{
-    await axios.delete(`${process.env.REACT_APP_API}/category/${slug}`,{
+    return await axios.delete(`${process.env.REACT_APP_API}/category/${slug}`,{
         headers:{
             authToken,
         }
     });
 }
 export const updateteCategory = async (slug,category,authToken) =>{
-    await axios.put(`${process.env.REACT_APP_API}/category/${slug}`,category,{
+    return await axios.put(`${process.env.REACT_APP_API}/category/${slug}`,category,{
         headers:{
             authToken,
         }
     });
 }
 export const createCategory = async (category,authToken) =>{
-    await axios.post(`${process.env.REACT_APP_API}/category`,category,{
+    return await axios.post(`${process.env.REACT_APP_API}/category`,category,{
         headers:{
             authToken,
         }
