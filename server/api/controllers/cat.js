@@ -1,4 +1,3 @@
-const { json } = require('body-parser');
 const Cat = require('../models/category'),
     Product = require('../models/product'),
 SubCat = require('../models/subCat'),

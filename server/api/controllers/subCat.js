@@ -1,5 +1,6 @@
 const SubCat = require('../models/subCat'),
-slugify = require('slugify');
+slugify = require('slugify'),
+Product = require('../models/product');
 
 exports.create = async (req,res) =>{
     try{
@@ -22,15 +23,24 @@ exports.list = async (req,res) =>{
 
     res.json(await SubCat.find({}).sort({ createdAt: -1 }).exec());
 };
-exports.read = (req,res) =>{
-    SubCat.findOne({slug:req.params.slug}).then(result =>{
-        res.json(result);
-    }).catch(err =>{
+exports.read = async (req,res) =>{
+    try{
+        const subCat = await SubCat.findOne({slug:req.params.slug}).exec()
+        const products = await Product.find({subCat})
+        .populate('category')
+        .populate('subCat')
+        .exec()
+        res.json({
+            subCat,
+            products
+        });
+    }
+    catch(err){
         res.status(400).json({
             err,
             error:"Something wrong occured"
         })
-    })
+    }
 };
 exports.update = (req,res) =>{
     const {name, parent} = req.body

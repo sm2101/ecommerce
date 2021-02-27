@@ -109,7 +109,7 @@ const ProductPage = ({product, star, onStarClick}) => {
                         </span>
                         {subCat && subCat.map(s =>(
                             <span>
-                                <Link to = {`/category/${s.slug}`}>
+                                <Link to = {`/sub-category/${s.slug}`}>
                                     {s.name}
                                 </Link>
                             </span>
