@@ -3,11 +3,20 @@ import { Card } from "antd";
 import {useHistory} from "react-router-dom";
 import {Link} from "react-router-dom"
 import {EyeOutlined, ShoppingCartOutlined} from "@ant-design/icons"
+import {ShowAverage} from '../../Functions/rating'
 const { Meta } = Card;
 const UserProductCard = ({product}) => {
     const { title, description, images, slug } = product;
 
     return (
+      <>
+      <div id = "rating">
+      {product && product.rating && product.rating.length >0 ? 
+            ShowAverage(product) : (
+            <div className = "text-center py-2">
+                No Ratings yet!
+            </div>)}
+      </div>
         <Card className = "p-2"
       cover={
         <img
@@ -36,6 +45,7 @@ const UserProductCard = ({product}) => {
       description={`${description && description.substring(0,50)}...`} 
       />
     </Card>
+    </>
     )
 }
 

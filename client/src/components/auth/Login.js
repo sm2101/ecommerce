@@ -20,11 +20,16 @@ const Login  = ( { history } ) => {
 
 
     const roleBasedRedirect = (res) =>{
+        let intend = history.location.state;
+        if(intend){
+            history.push(intend.from)
+        } else {
             if(res.data.role === "Admin"){
                 history.push("/admin/dashboard");
             } else {
                 history.push('/')
             }
+        }
         }
     
     const googleLogin = async () =>{
@@ -65,8 +70,12 @@ const Login  = ( { history } ) => {
 
     // everytime component mounts
     useEffect(()=>{
-        if(user && user.token){
-            history.push('/');
+        if(history.location.state){
+            return;
+        } else {
+            if(user && user.token){
+                history.push('/');
+            }
         }
     },[user,history]);
 

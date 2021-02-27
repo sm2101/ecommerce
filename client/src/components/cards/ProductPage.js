@@ -1,16 +1,37 @@
 import React from 'react';
-import {Card} from 'antd';
+import {Card, Tabs } from 'antd';
 import {Link} from 'react-router-dom';
 import {HeartOutlined, ShoppingCartOutlined, StarOutlined} from '@ant-design/icons';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import {Carousel} from 'react-responsive-carousel';
-const {Meta} = Card;
-const ProductPage = ({product}) => {
-    const {title,description,images,slug} = product
+import StartRatings from 'react-star-ratings';
+import RatingModal from '../modal/RatingModal';
+import {ShowAverage} from '../../Functions/rating'
+const {TabPane} = Tabs;
+const ProductPage = ({product, star, onStarClick}) => {
+    const {
+        title,
+        description,
+        images,
+        slug,
+        price,
+        color,
+        category,
+        subCat,
+        shipping,
+        quantity,
+        _id
+    } = product
     return (
         <>
         <div className="col-12 col-md-7">
-            {images && images.length ?<Carousel showArrows = {true} autoPlay infiniteLoop>
+            <div className="row">
+            {images && images.length ?<Carousel 
+            showArrows = {true} 
+            autoPlay 
+            infiniteLoop
+            className = "height-25"
+            >
                 {images && images.map(i => (
                     <img src = {i.url} key={i.public_id}></img>
                 ))}
@@ -25,8 +46,24 @@ const ProductPage = ({product}) => {
             }
             ></Card> 
             }
+            </div>
+            <div className="row mt-3">
+                <Tabs type = "card">
+                    <TabPane tab = "Description" key = "1">
+                        {description}
+                    </TabPane>
+                </Tabs>
+            </div>
         </div>
         <div className="col-12 col-md-5">
+            <div>
+            <h1 className = "display-3">{title}</h1>
+            {product && product.rating && product.rating.length >0 ? 
+            ShowAverage(product) : (
+            <div className = "text-center py-2">
+                No Ratings yet!
+            </div>)}
+            </div>
             <Card
             actions = {[
                 <>
@@ -35,15 +72,74 @@ const ProductPage = ({product}) => {
                 <>
                 <HeartOutlined className = "text-danger"/> Add to wishLisht
                 </>,
-                <>
-                <StarOutlined className = "text-warning"/>Leave a rating
-                </>
+                <RatingModal>
+                <StartRatings
+                    name = {_id}
+                    numberOfStars ={5}
+                    rating = {star}
+                    changeRating = {onStarClick}
+                    isSelectable = {true}
+                    starRatedColor = "#437846" 
+                    />
+                </RatingModal>
             ]}
             >
-                <Meta
-                title = {title}
-                description = {description}
-                ></Meta>
+                <ul className = "list-group-flush p-0">
+                    <li className="list-group-item d-flex justify-content-between">
+                        <span>
+                            Price
+                        </span>
+                        <span>
+                            {price}
+                        </span>
+                    </li>
+                    <li className="list-group-item d-flex justify-content-between">
+                        <span>
+                            Category
+                        </span>
+                        <span>
+                            {category && (<Link to = {`/category/${category.slug}`}>
+                            {category.name}
+                            </Link>)}
+                        </span>
+                    </li>
+                    <li className="list-group-item d-flex justify-content-between">
+                        <span>
+                            Sub Categories
+                        </span>
+                        {subCat && subCat.map(s =>(
+                            <span>
+                                <Link to = {`/category/${s.slug}`}>
+                                    {s.name}
+                                </Link>
+                            </span>
+                        ))}
+                    </li>
+                    <li className="list-group-item d-flex justify-content-between">
+                        <span>
+                            Shipping
+                        </span>
+                        <span>
+                            {shipping}
+                        </span>
+                    </li>
+                    <li className="list-group-item d-flex justify-content-between">
+                        <span>
+                            Color
+                        </span>
+                        <span>
+                            {color}
+                        </span>
+                    </li>
+                    <li className="list-group-item d-flex justify-content-between">
+                        <span>
+                            Quantity
+                        </span>
+                        <span>
+                            {quantity}
+                        </span>
+                    </li>
+                </ul>
             </Card>
         </div>
         </>

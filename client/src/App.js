@@ -27,6 +27,7 @@ import UpdateSubCat from './components/admin/SubCategory/UpdateSubCat';
 import CreateProduct from "./components/admin/Products/CreateProduct";
 import AllProducts from "./components/admin/Products/AllProducts";
 import UpdateProduct from './components/admin/Products/UpdateProduct';
+import CategoryHome from './components/Category/CategoryHome'
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -62,6 +63,7 @@ const App = () => {
       <Switch>
         <Route exact path = '/' component = {Landing} />
         <Route exact path = '/product/:slug' component = {Product} />
+        <Route exact path = '/category/:slug' component = {CategoryHome} />
         <Route exact path = '/login' component = {Login} />
         <Route exact path = '/register' component = {Register} />
         <Route exact path = '/register/complete' component = {CompleteRegister} />

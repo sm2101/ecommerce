@@ -1,5 +1,6 @@
 const Product = require('../models/product'),
-      slugify = require('slugify');
+      slugify = require('slugify'),
+      User = require('../models/user');
 
 exports.create = async (req,res) =>{
     try{
@@ -83,4 +84,52 @@ exports.listLanding = async(req,res) =>{
 exports.productCount = async (req,res) =>{
     let total = await Product.find({}).estimatedDocumentCount().exec();
     res.json(total)
+}
+
+exports.rating = async(req,res) =>{
+    let prod = await Product.findById(req.params.productId).exec();
+    let user = await User.findOne({email: req.user.email}).exec();
+    const {star} = req.body;
+
+    let exist = prod.rating.find((ele) => (
+        ele.postedBy.toString() === user._id.toString()
+    ))
+    if(exist === undefined){
+        let newRating = await Product.findByIdAndUpdate(prod._id,{
+            $push :{ rating:{
+                star,
+                postedBy: user._id
+            } }
+        },{
+            new : true
+        }
+        ).exec();
+        res.json(newRating);
+    } else {
+        const updateRating = await Product.updateOne(
+            {
+                rating : { $elemMatch : exist },
+            },
+            {
+                $set : { "rating.$.star": star }
+            },
+            {
+                new : true
+            }
+        ).exec()
+        res.json(updateRating);
+    }
+}
+
+exports.listRelated = async(req,res) =>{
+    const prod = await Product.findById(req.params.productId).exec();
+    const related = await Product.find({
+        _id:{$ne : prod._id},
+        category:prod.category,
+    }).limit(4)
+    .populate('category')
+    .populate('subCat')
+    .exec()
+
+    res.json(related);
 }

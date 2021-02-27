@@ -1,5 +1,6 @@
 const { json } = require('body-parser');
 const Cat = require('../models/category'),
+    Product = require('../models/product'),
 SubCat = require('../models/subCat'),
 slugify = require('slugify');
 
@@ -20,26 +21,20 @@ exports.create = async (req,res) =>{
     }
 };
 exports.list = async (req,res) =>{
+    const category = await Cat.find({}).sort({ createdAt: -1 }).exec()
+    res.json(category);
 
-    res.json(await Cat.find({}).sort({ createdAt: -1 }).exec());
-    // Cat.find({}).then(result =>{
-    //     res.json(result.sort({createdAt:-1}));
-    // }).catch(err =>{
-    //     res.status(400).json({
-    //         error:"Fetching categories failed",
-    //         err
-    //     })
-    // })
 };
-exports.read = (req,res) =>{
-    Cat.findOne({slug:req.params.slug}).then(result =>{
-        res.json(result);
-    }).catch(err =>{
-        res.status(400).json({
-            err,
-            error:"Something wrong occured"
-        })
-    })
+exports.read = async(req,res) =>{
+    const category = await Cat.findOne({slug:req.params.slug}).exec();
+    const products = await Product.find({category})
+    .populate('category')
+    .populate('subCat')
+    .exec()
+    res.json({
+        category,
+        products
+    });
 };
 exports.update = (req,res) =>{
     const {name} = req.body
