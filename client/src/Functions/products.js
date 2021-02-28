@@ -27,11 +27,12 @@ export const createProduct = async (product,authToken) =>{
         }
     });
 }
-export const getProductsLanding = async (sort,order,page) =>{
+export const getProductsLanding = async (sort,order,page, perPage) =>{
    return await axios.post(`${process.env.REACT_APP_API}/products`,{
         sort,
         order,
-        page
+        page,
+        perPage
     }
     )
 }
@@ -50,3 +51,7 @@ export const productStar = async (productId,star,authToken) =>{
 export const getRelated = async (productId) =>{
     return await axios.get(`${process.env.REACT_APP_API}/product/related/${productId}`);
 }
+
+export const getProductsFilter = async (arg) =>{
+    return await axios.post(`${process.env.REACT_APP_API}/product/search`,arg)
+ }

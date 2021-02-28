@@ -12,7 +12,7 @@ const BestSeller = () => {
     
     const loadAllProducts = () =>{
         setLoading(true)
-        getProductsLanding('sold','desc',page).then(res=>{
+        getProductsLanding('sold','desc',page,4).then(res=>{
             setLoading(false)
             setProducts(res.data)
         }).catch(err =>{

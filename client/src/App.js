@@ -6,6 +6,7 @@ import Register from './components/auth/Register';
 import CompleteRegister from './components/auth/CompleteRegister';
 import Landing from './components/Landing';
 import Product from './components/Product';
+import Shop from './components/Shop';
 import Navbar from './components/Nav/Navbar';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -64,6 +65,7 @@ const App = () => {
       <Switch>
         <Route exact path = '/' component = {Landing} />
         <Route exact path = '/product/:slug' component = {Product} />
+        <Route exact path = '/shop' component = {Shop} />
         <Route exact path = '/category/:slug' component = {CategoryHome} />
         <Route exact path = '/sub-category/:slug' component = {SubCategoryHome} />
         <Route exact path = '/login' component = {Login} />

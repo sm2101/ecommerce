@@ -8,7 +8,8 @@ const express = require('express'),
         listLanding, 
         productCount, 
         rating,
-        listRelated
+        listRelated,
+        searchProduct
     } = require('../controllers/products'),
       {authCheck, adminCheck} = require('../middleWares/auth');
 
@@ -23,4 +24,5 @@ const express = require('express'),
     router.post('/products',listLanding);
     router.put("/product/rating/:productId",authCheck, rating)
     router.get('/product/related/:productId',listRelated);
+    router.post('/product/search',searchProduct)
 module.exports = router;

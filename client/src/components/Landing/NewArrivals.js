@@ -12,7 +12,7 @@ const NewArrivals = () => {
     
     const loadAllProducts = () =>{
         setLoading(true)
-        getProductsLanding('createdAt','desc',page).then(res=>{
+        getProductsLanding('createdAt','desc',page,4).then(res=>{
             setLoading(false)
             console.log(res.data)
             setProducts(res.data)

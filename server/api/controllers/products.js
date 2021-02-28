@@ -63,13 +63,13 @@ exports.remove = (req,res) =>{
 
 exports.listLanding = async(req,res) =>{
     try{
-        const {sort, order, page} = req.body;
+        const {sort, order, page, perPage} = req.body;
         const prods = await Product.find({})
-            .skip((page -1)*4)
+            .skip((page -1)*perPage)
             .populate("category")
             .populate("subCat")
             .sort([[sort,order]])
-            .limit(4)
+            .limit(perPage)
             .exec();
         console.log(prods)
         res.json(prods)
@@ -132,4 +132,38 @@ exports.listRelated = async(req,res) =>{
     .exec()
 
     res.json(related);
+}
+
+const handleQuery = async(req,res,query) =>{
+    const products = await Product.find({ $text: {
+        $search : query
+    } })
+    .populate('category', '_id name')
+    .populate('subCat', '_id name')
+    .exec()
+    res.json(products)
+}
+const handlePrice = async (req,res,price) =>{
+    const products = await Product.find({
+        price:{
+            $gte : price[0],
+            $lte : price[1]
+        }
+    })
+    .populate('category')
+    .populate('subCat')
+    .exec()
+
+    res.json(products);
+}
+
+exports.searchProduct = async(req,res) =>{
+    const {query,price} = req.body
+
+    if(query){
+        await handleQuery(req,res,query);
+    }
+    if(price !== undefined){
+        await handlePrice(req,res,price);
+    }
 }

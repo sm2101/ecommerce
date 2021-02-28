@@ -6,6 +6,7 @@ import firebase from 'firebase';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import { LOGOUT } from '../../Actions/types';
+import ProductSearchForm from '../Forms/ProductSearchForm'
 const { SubMenu } = Menu;
 const Navbar = () => {
   const [current, setCurrent] = useState("home");
@@ -32,7 +33,10 @@ const Navbar = () => {
                 <Menu.Item key="about">
                 <Link to = '/about'>About Us</Link>
                 </Menu.Item>
-                <SubMenu title="Shop" icon = {<ShoppingOutlined />}>
+                <Menu.Item key = "shop" icon = {<ShoppingOutlined />} >
+                  <Link to = "/shop">Shop</Link>
+                </Menu.Item>
+                {/* <SubMenu title="Shop" icon = {<ShoppingOutlined />} key = "shop">
                   <Menu.ItemGroup title="Item 1">
                     <Menu.Item key="shop-item-1">Option 1</Menu.Item>
                     <Menu.Item key="shop-item-2">Option 2</Menu.Item>
@@ -41,7 +45,7 @@ const Navbar = () => {
                     <Menu.Item key="shop-item-3">Option 3</Menu.Item>
                     <Menu.Item key="shop-item-4">Option 4</Menu.Item>
                   </Menu.ItemGroup>
-                </SubMenu>
+                </SubMenu> */}
                 {!user && (
                   <>
                     <Menu.Item key="Register" icon = {<UserAddOutlined />} className = "float-end" >
@@ -69,6 +73,9 @@ const Navbar = () => {
                     <Menu.Item key="setting:4" icon = {<LogoutOutlined />} onClick = {logout}>Logout</Menu.Item>
                 </SubMenu>
                 )}
+                <Menu.Item>
+                  <ProductSearchForm setCurrent = {setCurrent} />
+                </Menu.Item>
               </Menu>
             );
     }
