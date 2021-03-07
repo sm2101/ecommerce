@@ -157,13 +157,81 @@ const handlePrice = async (req,res,price) =>{
     res.json(products);
 }
 
+const handleCategory = async (req,res,category) =>{
+    const products = await Product.find({
+        category
+    })
+    .populate('category')
+    .populate('subCat')
+    .exec()
+
+    res.json(products);
+}
+const handleStar = (req, res, stars) => {
+    Product.aggregate([
+      {
+        $project: {
+          document: "$$ROOT",
+          // title: "$title",
+          floorAverage: {
+            $floor: { $avg: "$rating.star" }, // floor value of 3.33 will be 3
+          },
+        },
+      },
+      { $match: { floorAverage: stars } },
+    ])
+      .limit(12)
+      .exec((err, aggregates) => {
+        if (err) console.log("AGGREGATE ERROR", err);
+        Product.find({ _id: aggregates })
+          .populate("category", "_id name")
+          .populate("subCat", "_id name")
+          .exec((err, products) => {
+            if (err) console.log("PRODUCT AGGREGATE ERROR", err);
+            res.json(products);
+          });
+      });
+  };
+  
+  const handleSub = async (req, res, sub) => {
+    const products = await Product.find({ subCat: sub })
+      .populate("category", "_id name")
+      .populate("subCat", "_id name")
+      .exec();
+  
+    res.json(products);
+  };
+  
+  const handleShipping = async (req, res, shipping) => {
+    const products = await Product.find({ shipping })
+      .populate("category", "_id name")
+      .populate("subCat", "_id name")
+      .exec();
+  
+    res.json(products);
+  };
+
 exports.searchProduct = async(req,res) =>{
-    const {query,price} = req.body
+    const {query,price, category, stars, sub, shipping} = req.body
 
     if(query){
         await handleQuery(req,res,query);
     }
     if(price !== undefined){
         await handlePrice(req,res,price);
+    }
+    if(category){
+        await handleCategory(req,res,category);
+    }
+    if(stars){
+        await handleStar(req, res, stars);
+    }
+    
+    if(sub){
+        await handleSub(req, res, sub);
+    }
+    
+    if(shipping){
+        await handleShipping(req, res, shipping);
     }
 }
