@@ -7,6 +7,8 @@ import CompleteRegister from './components/auth/CompleteRegister';
 import Landing from './components/Landing';
 import Product from './components/Product';
 import Shop from './components/Shop';
+import Cart from './components/Cart';
+import Checkout from './components/Checkout';
 import Navbar from './components/Nav/Navbar';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -30,6 +32,9 @@ import AllProducts from "./components/admin/Products/AllProducts";
 import UpdateProduct from './components/admin/Products/UpdateProduct';
 import CategoryHome from './components/Category/CategoryHome'
 import SubCategoryHome from './components/Sub Category/SubCategoryHome'
+import SideCart from './components/Drawer/SideCart';
+import Checkbox from 'antd/lib/checkbox/Checkbox';
+
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -62,10 +67,12 @@ const App = () => {
     <Navbar />
     <ToastContainer />
     </div>
+    <SideCart />
       <Switch>
         <Route exact path = '/' component = {Landing} />
         <Route exact path = '/product/:slug' component = {Product} />
         <Route exact path = '/shop' component = {Shop} />
+        <Route exact path = '/cart' component = {Cart} />
         <Route exact path = '/category/:slug' component = {CategoryHome} />
         <Route exact path = '/sub-category/:slug' component = {SubCategoryHome} />
         <Route exact path = '/login' component = {Login} />
@@ -75,6 +82,7 @@ const App = () => {
         <UserRoute exact path = '/user/history' component = {History} />
         <UserRoute exact path = '/user/wishlist' component = {Wishlist} />
         <UserRoute exact path = '/user/password' component = {Password} />
+        <UserRoute exact path = '/checkout' component = {Checkout} />
         <AdminRoutes exact path = '/admin/dashboard' component = {Dashboard} />
         <AdminRoutes exact path = '/admin/category' component = {CreateCategory} />
         <AdminRoutes exact path = '/admin/sub-category' component = {CreateSubCat} />

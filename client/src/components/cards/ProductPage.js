@@ -1,5 +1,5 @@
-import React from 'react';
-import {Card, Tabs } from 'antd';
+import React, {useState} from 'react';
+import {Card, Tabs, Tooltip } from 'antd';
 import {Link} from 'react-router-dom';
 import {HeartOutlined, ShoppingCartOutlined, StarOutlined} from '@ant-design/icons';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -7,7 +7,12 @@ import {Carousel} from 'react-responsive-carousel';
 import StartRatings from 'react-star-ratings';
 import RatingModal from '../modal/RatingModal';
 import {ShowAverage} from '../../Functions/rating'
+import {ADD_TO_CART, SET_VISIBLE} from '../../Actions/types'
+import {useDispatch, useSelector} from 'react-redux'
+import _ from "lodash";
+
 const {TabPane} = Tabs;
+
 const ProductPage = ({product, star, onStarClick}) => {
     const {
         title,
@@ -22,6 +27,40 @@ const ProductPage = ({product, star, onStarClick}) => {
         quantity,
         _id
     } = product
+    const [toolTip, setToolTip] = useState("Click to add");
+    const dispatch = useDispatch();
+    const {user,cart} = useSelector(state =>({...state}));
+    const addToCart = () =>{
+      // cart array
+      let cart = []
+      if(typeof window !== 'undefined'){
+        // if the cart already in local storage
+        if(localStorage.getItem('cart')){
+          cart = JSON.parse(localStorage.getItem('cart'));
+        } 
+          // push new product
+          cart.push(
+            {
+              ...product,
+              count: 1
+            }
+          );
+          // remove duplicate
+          let unique = _.uniqWith(cart, _.isEqual)
+          // save in loca storage
+          localStorage.setItem("cart", JSON.stringify(unique))
+          setToolTip("Added");
+          // dispatch cart to redux
+          dispatch({
+            type:ADD_TO_CART,
+            payload:unique
+          })
+          dispatch({
+              type:SET_VISIBLE,
+              payload:true
+          })
+      }
+    }
     return (
         <>
         <div className="col-12 col-md-7">
@@ -66,9 +105,14 @@ const ProductPage = ({product, star, onStarClick}) => {
             </div>
             <Card
             actions = {[
-                <>
-                <ShoppingCartOutlined className = "text-success"/>Add to Cart
-                </>,
+                <Tooltip title = {toolTip}>
+                    <a onClick = {addToCart}>
+                        <ShoppingCartOutlined 
+                        className = "text-primary"
+                        /><br />
+                        <span className = "text-primary card-action-text">Add to cart</span>
+                    </a>
+                </Tooltip>,
                 <>
                 <HeartOutlined className = "text-danger"/> Add to wishLisht
                 </>,

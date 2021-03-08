@@ -1,13 +1,49 @@
-import React from 'react'
-import { Card } from "antd";
+import React, {useState} from 'react'
+import { Card, Tooltip } from "antd";
 import {useHistory} from "react-router-dom";
+import {useDispatch, useSelector} from 'react-redux'
 import {Link} from "react-router-dom"
 import {EyeOutlined, ShoppingCartOutlined} from "@ant-design/icons"
 import {ShowAverage} from '../../Functions/rating'
+import {ADD_TO_CART, SET_VISIBLE} from '../../Actions/types'
+import _ from "lodash";
 const { Meta } = Card;
 const UserProductCard = ({product}) => {
+  const [toolTip, setToolTip] = useState("Click to add");
     const { title, description, images, slug } = product;
-
+    const dispatch = useDispatch();
+    const {user,cart} = useSelector(state =>({...state}));
+    const addToCart = () =>{
+      // cart array
+      let cart = []
+      if(typeof window !== 'undefined'){
+        // if the cart already in local storage
+        if(localStorage.getItem('cart')){
+          cart = JSON.parse(localStorage.getItem('cart'));
+        } 
+          // push new product
+          cart.push(
+            {
+              ...product,
+              count: 1
+            }
+          );
+          // remove duplicate
+          let unique = _.uniqWith(cart, _.isEqual)
+          // save in loca storage
+          localStorage.setItem("cart", JSON.stringify(unique))
+          setToolTip("Added");
+          // dispatch cart to redux
+          dispatch({
+            type:ADD_TO_CART,
+            payload:unique
+          })
+          dispatch({
+            type:SET_VISIBLE,
+            payload:true
+          })
+      }
+    }
     return (
       <>
       <div id = "rating">
@@ -32,12 +68,14 @@ const UserProductCard = ({product}) => {
           /> <br />
           <span className = "text-primary card-action-text">View Product</span>
         </Link>,
-        <>
+        <Tooltip title = {toolTip}>
+          <a onClick = {addToCart}>
         <ShoppingCartOutlined 
           className = "text-primary"
           /><br />
           <span className = "text-primary card-action-text">Add to cart</span>
-        </>
+        </a>
+        </Tooltip>
       ]}
     >
       <Meta 

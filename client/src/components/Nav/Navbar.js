@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
-import {Menu} from 'antd';
-import { UserOutlined ,UserAddOutlined, ShoppingOutlined, LogoutOutlined} from '@ant-design/icons';
+import {Menu, Badge} from 'antd';
+import { ShoppingCartOutlined ,UserOutlined ,UserAddOutlined, ShoppingOutlined, LogoutOutlined} from '@ant-design/icons';
 import {Link} from 'react-router-dom';
 import firebase from 'firebase';
 import {useDispatch, useSelector} from 'react-redux';
@@ -12,7 +12,7 @@ const Navbar = () => {
   const [current, setCurrent] = useState("home");
   const dispatch = useDispatch(),
         history = useHistory(),
-        {user} = useSelector((state)=>({...state}));
+        {user, cart} = useSelector((state)=>({...state}));
         console.log(user);
   const handleClick = e => {
         setCurrent(e.key)
@@ -73,6 +73,13 @@ const Navbar = () => {
                     <Menu.Item key="setting:4" icon = {<LogoutOutlined />} onClick = {logout}>Logout</Menu.Item>
                 </SubMenu>
                 )}
+                <Menu.Item key="Cart" icon = {<ShoppingCartOutlined />} className = "float-end">
+                  <Link to = '/cart'>
+                    <Badge count = {cart.length} offset = {[9,0]}>
+                      Cart
+                    </Badge>
+                  </Link>
+                </Menu.Item>
                 <Menu.Item>
                   <ProductSearchForm setCurrent = {setCurrent} />
                 </Menu.Item>
