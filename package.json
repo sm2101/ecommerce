@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/sm2101/ecommerce/issues"
   },
-  "homepage": "https://github.com/sm2101/ecommerce#readme"
+  "homepage": "https://github.com/sm2101/ecommerce#readme",
+  "dependencies": {
+    "@david.kucsai/react-pdf-table": "^0.3.0",
+    "@react-pdf/renderer": "^1.6.13"
+  }
 }

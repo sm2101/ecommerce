@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useSelector, useDispatch } from "react-redux";
 import { createPaymentIntent } from "../Functions/stripe";
+import { createOrder, emptyCart } from "../Functions/user";
 import { Card } from "antd";
+import { ADD_TO_CART, ADD_COUPON } from "../Actions/types";
 import { DollarCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
 const cardStyle = {
   style: {
@@ -51,7 +53,24 @@ const StripePayment = ({ history }) => {
       setErroe(`Payment Failed ${payload.error.message}`);
       setProccesing(false);
     } else {
-      console.log(payload);
+      createOrder(payload, user.token).then((res) => {
+        if (res.data.ok) {
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("cart");
+          }
+          // from redux
+          dispatch({
+            type: ADD_TO_CART,
+            payload: [],
+          });
+          dispatch({
+            type: ADD_COUPON,
+            payload: false,
+          });
+          // from db
+          emptyCart(user.token).then((res) => {});
+        }
+      });
       setErroe(null);
       setProccesing(false);
       setSuccess(true);
@@ -68,6 +87,7 @@ const StripePayment = ({ history }) => {
         setClientSecret(res.data.clientSecret);
         setCartTotal(res.data.cartTotal);
         setTotalPayable(res.data.finalAmount);
+        console.log(coupon);
       })
       .catch((err) => {
         console.log(err);
@@ -77,7 +97,7 @@ const StripePayment = ({ history }) => {
     <>
       {!success && (
         <div className="text-center">
-          {coupon ? (
+          {coupon === true ? (
             <p className="alert alert-success">{`Total after discount: ${totalPayable}`}</p>
           ) : (
             <p className="alert alert-danger">No Coupon Applied!</p>
