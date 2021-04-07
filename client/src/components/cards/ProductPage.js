@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Card, Tabs, Tooltip } from "antd";
+import { Card, Tooltip } from "antd";
 import { Link } from "react-router-dom";
 import {
   HeartOutlined,
   ShoppingCartOutlined,
   StarOutlined,
 } from "@ant-design/icons";
+import { addToWishlisht } from "../../Functions/user";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import StartRatings from "react-star-ratings";
@@ -13,9 +14,9 @@ import RatingModal from "../modal/RatingModal";
 import { ShowAverage } from "../../Functions/rating";
 import { ADD_TO_CART, SET_VISIBLE } from "../../Actions/types";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
 import _ from "lodash";
-
-const { TabPane } = Tabs;
+import { toast } from "react-toastify";
 
 const ProductPage = ({ product, star, onStarClick }) => {
   const {
@@ -34,6 +35,8 @@ const ProductPage = ({ product, star, onStarClick }) => {
   const [toolTip, setToolTip] = useState("Click to add");
   const dispatch = useDispatch();
   const { user, cart } = useSelector((state) => ({ ...state }));
+  const history = useHistory();
+  const location = useLocation();
   const addToCart = () => {
     // cart array
     let cart = [];
@@ -63,63 +66,77 @@ const ProductPage = ({ product, star, onStarClick }) => {
       });
     }
   };
+  const loginRedirect = () => {
+    history.push({
+      pathname: "/login",
+      state: {
+        from: location.pathname,
+      },
+    });
+  };
+  const addWishlist = (e) => {
+    addToWishlisht(product._id, user.token).then((res) => {
+      if (res.data.ok) {
+        toast.success("Added to Wishlist");
+      }
+    });
+  };
   return (
     <>
-      <div className="col-12 col-md-7">
-        <div className="row">
+      <div className="col-12 col-md-7 mt-5 d-flex align-items-center justify-content-center">
+        <div className="row product-cara w-100">
           {images && images.length ? (
-            <Carousel
-              showArrows={true}
-              autoPlay
-              infiniteLoop
-              className="height-25"
-            >
+            <Carousel showArrows={true} autoPlay infiniteLoop>
               {images &&
-                images.map((i) => <img src={i.url} key={i.public_id}></img>)}
+                images.map((i) => (
+                  <img src={i.url} key={i.public_id} alt="product"></img>
+                ))}
             </Carousel>
           ) : (
             <Card
               cover={
                 <img
                   src="https://i1.wp.com/fremontgurdwara.org/wp-content/uploads/2020/06/no-image-icon-2.png"
-                  style={{ height: "25rem", objectFit: "cover" }}
+                  style={{ height: "20rem", objectFit: "cover" }}
                   alt="Default"
                 />
               }
             ></Card>
           )}
         </div>
-        <div className="row mt-3">
-          <Tabs type="card">
-            <TabPane tab="Description" key="1">
-              {description}
-            </TabPane>
-          </Tabs>
-        </div>
       </div>
-      <div className="col-12 col-md-5">
-        <div>
+      <div className="col-12 col-md-5 mt-5">
+        {/* <div>
           <h1 className="display-3">{title}</h1>
-          {product && product.rating && product.rating.length > 0 ? (
-            ShowAverage(product)
-          ) : (
-            <div className="text-center py-2">No Ratings yet!</div>
-          )}
-        </div>
+        </div> */}
         <Card
+          title={title}
           actions={[
-            <Tooltip title={quantity < 1 ? "Out of Stock" : toolTip}>
-              <a onClick={addToCart} disabled={quantity < 1}>
+            <button
+              onClick={addToCart}
+              disabled={quantity < 1}
+              className=" btn btn-page"
+            >
+              <Tooltip title={quantity < 1 ? "Out of Stock" : toolTip}>
                 <ShoppingCartOutlined className="text-primary" />
                 <br />
                 <span className="text-primary card-action-text">
                   {quantity < 1 ? "Out of Stock" : " Add to cart"}
                 </span>
-              </a>
-            </Tooltip>,
-            <>
-              <HeartOutlined className="text-danger" /> Add to wishLisht
-            </>,
+              </Tooltip>
+            </button>,
+            <button
+              onClick={!user ? loginRedirect : addWishlist}
+              className="btn btn-page text-danger"
+            >
+              <HeartOutlined />
+              <br />{" "}
+              {!user ? (
+                "Login"
+              ) : (
+                <span style={{ fontSize: "x-small" }}>Add to wishLisht</span>
+              )}
+            </button>,
             <RatingModal>
               <StartRatings
                 name={_id}
@@ -127,7 +144,7 @@ const ProductPage = ({ product, star, onStarClick }) => {
                 rating={star}
                 changeRating={onStarClick}
                 isSelectable={true}
-                starRatedColor="#437846"
+                starRatedColor="Gold"
               />
             </RatingModal>,
           ]}
@@ -135,7 +152,10 @@ const ProductPage = ({ product, star, onStarClick }) => {
           <ul className="list-group-flush p-0">
             <li className="list-group-item d-flex justify-content-between">
               <span>Price</span>
-              <span>{price}</span>
+              <span>
+                <span>&#8377;</span>
+                {price}
+              </span>
             </li>
             <li className="list-group-item d-flex justify-content-between">
               <span>Category</span>
@@ -165,6 +185,16 @@ const ProductPage = ({ product, star, onStarClick }) => {
             <li className="list-group-item d-flex justify-content-between">
               <span>Quantity</span>
               <span>{quantity}</span>
+            </li>
+            <li className="list-group-item d-flex justify-content-between">
+              <span>Rating</span>
+              <span>
+                {product && product.rating && product.rating.length > 0 ? (
+                  ShowAverage(product, true)
+                ) : (
+                  <div className="text-center py-2">No Ratings yet!</div>
+                )}
+              </span>
             </li>
           </ul>
         </Card>

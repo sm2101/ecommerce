@@ -1,46 +1,36 @@
 @import "~antd/dist/antd.css";
-.ant-menu .ant-menu-item-selected {
-  background: transparent;
+@import url("https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap");
+*::-webkit-scrollbar {
+  display: none;
+}
+#quickLinks ul li {
+  background-color: transparent;
+  border-color: transparent;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+* {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 html,
 body,
 #root {
   height: 100%;
+  width: 100vw;
+  overflow-x: hidden;
 }
-.ant-menu {
-  background: rgba(203, 222, 180, 1);
-  border-radius: 0.75rem;
-  transition: 0.2s;
+.btn-card {
+  background-color: white;
 }
-.nav-scroll {
-  padding: 0;
-}
-.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover,
-.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:hover,
-.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-active,
-.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-active,
-.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-open,
-.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-open,
-.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected,
-.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-selected {
-  color: #29361a;
-  border-bottom: 2px solid #29361a;
+body {
+  background: white;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .nav-logo {
   width: 2rem;
   height: 2rem;
-}
-.auth-box {
-  border-radius: 1.25rem;
-  overflow: hidden;
-  box-shadow: 0.5rem 0.5rem 0.5rem 0.25rem #29361a;
-}
-.auth-side {
-  background: url("https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=564&q=80");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  align-items: center;
 }
 .auth-side h1 {
   color: white;
@@ -207,8 +197,334 @@ button:hover {
     transform: rotate(360deg);
   }
 }
+.carousel {
+  height: 50vh;
+  vertical-align: middle;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cara-cont {
+  height: 50vh;
+}
 @media only screen and (max-width: 600px) {
   form {
     width: 80vw;
   }
+  .carousel {
+    height: 75vh;
+    vertical-align: middle;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .cara-cont {
+    height: 75vh;
+  }
+}
+.carousel h1 {
+  color: white;
+}
+
+.menuBar {
+  padding: 0 20px;
+  background-color: #ffffff;
+  border-bottom: solid 1px #e8e8e8;
+  overflow: hidden;
+  box-shadow: 0 0 30px #f3f1f1;
+  position: fixed;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  float: left;
+  font-size: 1.5rem;
+}
+
+.logo a {
+  display: inline-block;
+  text-transform: capitalize;
+}
+
+.menuCon {
+  width: calc(100% - 6rem);
+  float: left;
+}
+
+.menuCon .ant-menu-item {
+  padding: 0px 5px;
+}
+
+.menuCon .ant-menu-submenu-title {
+  padding: 10px 20px;
+}
+
+.menuCon .ant-menu-item a,
+.menuCon .ant-menu-submenu-title a {
+  padding: 10px 15px;
+}
+
+.menuCon .ant-menu-horizontal {
+  border-bottom: none;
+}
+
+.menuCon .leftMenu {
+  float: left;
+}
+
+.menuCon .rightMenu {
+  float: right;
+}
+
+.barsMenu {
+  float: right;
+  height: 32px;
+  padding: 6px;
+  margin-top: 8px;
+  display: none;
+  background: none;
+}
+
+.barsBtn {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #1890ff;
+  position: relative;
+}
+
+.barsBtn:after,
+.barsBtn:before {
+  content: attr(x);
+  width: 20px;
+  position: absolute;
+  top: -6px;
+  left: 0;
+  height: 2px;
+  background: #1890ff;
+}
+
+.barsBtn:after {
+  top: auto;
+  bottom: -6px;
+}
+.barsMenu-left {
+  float: left !important;
+}
+.ant-drawer-body {
+  padding: 0;
+}
+
+.barsMenu > span {
+  display: block;
+}
+
+.ant-drawer-body .ant-menu-horizontal > .ant-menu-item,
+.ant-drawer-body .ant-menu-horizontal > .ant-menu-submenu {
+  display: inline-block;
+  width: 100%;
+}
+
+.ant-drawer-body .ant-menu-horizontal {
+  border-bottom: none;
+}
+
+.ant-drawer-body .ant-menu-horizontal > .ant-menu-item:hover {
+  border-bottom-color: transparent;
+}
+@media (max-width: 984px) {
+  .menuCon {
+    width: calc(100% - 5rem);
+    float: left;
+    padding-bottom: 1rem;
+  }
+}
+@media (max-width: 767px) {
+  .barsMenu {
+    display: inline-block;
+  }
+
+  .leftMenu,
+  .rightMenu {
+    display: none;
+  }
+  .menuCon {
+    width: calc(100% - 5rem);
+    float: left;
+  }
+  .logo a {
+    margin-left: -20px;
+  }
+
+  .menuCon .ant-menu-item,
+  .menuCon .ant-menu-submenu-title {
+    padding: 1px 20px;
+  }
+
+  .logo a {
+    padding: 10px 20px;
+  }
+}
+
+.login-form {
+  padding: 0 1rem 0 1rem;
+}
+.login-form button {
+  border-radius: 2rem;
+}
+
+.form__field {
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid #9b9b9b;
+  outline: 0;
+  font-size: 1.3rem;
+  color: rgb(0, 0, 0);
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+.form__field::placeholder {
+  color: transparent;
+}
+.form__field:placeholder-shown ~ .form__label {
+  font-size: 1.3rem;
+  cursor: text;
+  top: 20px;
+}
+
+.form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: #000000;
+}
+
+.form__field:focus {
+  padding-bottom: 6px;
+  font-weight: 700;
+  border-width: 3px;
+  border-image: linear-gradient(to right, #11998e, #38ef7d);
+  border-image-slice: 1;
+}
+.form__field:focus ~ .form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: #000000;
+  font-weight: 700;
+}
+
+/* reset input */
+.form__field:required,
+.form__field:invalid {
+  box-shadow: none;
+}
+.product-cara {
+  height: 30rem;
+  overflow: hidden;
+}
+@media only screen and (max-width: 600px) {
+  .product-cara {
+    height: 20rem;
+    overflow: hidden;
+  }
+}
+#c1 {
+  background: url("https://images.unsplash.com/photo-1483794344563-d27a8d18014e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
+  background-size: cover;
+  background-attachment: scroll;
+  background-position: right;
+  background-repeat: no-repeat;
+}
+#c2 {
+  background: url("https://images.unsplash.com/photo-1546387903-6d82d96ccca6?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80");
+  background-size: cover;
+  background-attachment: scroll;
+  background-position: left;
+  background-repeat: no-repeat;
+}
+.test {
+  border: 2px solid black;
+}
+.text-cont {
+  border-radius: 5px;
+  position: relative;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60%;
+  width: 80%;
+  font-family: "Pinyon Script", cursive;
+  font-size: 4.5rem;
+}
+@media only screen and (max-width: 600px) {
+  .text-cont {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60%;
+    width: 80%;
+    font-family: "Pinyon Script", cursive;
+    font-size: 2.5rem;
+    border-radius: 5px;
+    position: relative;
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.7);
+    overflow: hidden;
+  }
+}
+.footer {
+  min-height: 40vh;
+  position: relative;
+  bottom: 0;
+  background-color: rgb(29, 31, 34);
+  color: white;
+}
+.social-links a {
+  color: white;
+}
+.landing-quote-cont {
+  background-image: url("https://images.unsplash.com/photo-1568832359672-e36cf5d74f54?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+.landing-quote-box {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  box-shadow: white;
+  min-height: 6vh;
+}
+.btn-page {
+  box-shadow: none;
+}
+btn-page:hover {
+  box-shadow: none;
+}
+.loading {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 20;
 }

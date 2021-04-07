@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { getOrders } from "../../Functions/user";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { CheckCircleFilled, CloseCircleFilled } from "@ant-design/icons";
-import { toast } from "react-toastify";
 import {
   Document,
   Page,
   Text,
-  View,
   StyleSheet,
   PDFDownloadLink,
-  PDFViewer,
 } from "@react-pdf/renderer";
 import {
   Table,
@@ -183,35 +180,31 @@ const History = () => {
     </PDFDownloadLink>
   );
   return (
-    <div className="container-fluid m-0">
+    <div className="container-fluid mt-5 pt-5">
       <div className="container">
         <div className="row text-center mt-5">
           <h3>Purchase History</h3>
         </div>
-        <div className="row h-100 mt-5">
+        <div className="row h-100">
           <div className="col-12">
             {orders.map((order, i) => (
-              <div key={i} className="m-5 p-3 card">
+              <div key={i} className="m-3  card">
                 <div className="row w-100">
                   <div className="col-12 text-center">
                     <p>Order Id: {order.paymentIntent.id}</p>
                     <p>
-                      Order Amount :{" "}
-                      {(order.paymentIntent.amount / 100).toLocaleString(
-                        "en-US",
-                        {
-                          style: "currency",
-                          currency: "INR",
-                        }
-                      )}
-                    </p>
-                    <p>Method: {order.paymentIntent.payment_method_types[0]}</p>
-                    <p>
-                      Payment Status: {order.paymentIntent.status.toUpperCase()}
-                    </p>
-                    <p>
-                      Ordered On:{" "}
-                      {new Date(
+                      {`Order Amount : ${(
+                        order.paymentIntent.amount / 100
+                      ).toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "INR",
+                      })}`}
+                      {" / "}
+                      {`Method: ${order.paymentIntent.payment_method_types[0]}`}
+                      {" / "}
+                      {`Payment Status: ${order.paymentIntent.status.toUpperCase()}`}
+                      {" / "}
+                      {`Ordered On: ${new Date(
                         order.paymentIntent.created * 1000
                       ).toLocaleString("en-US", {
                         style: "date",
@@ -222,11 +215,11 @@ const History = () => {
                         weekday: "short",
                         hour: "2-digit",
                         minute: "2-digit",
-                      })}
+                      })}`}
                     </p>
                   </div>
                 </div>
-                <div className="row w-100">
+                <div className="row w-100 overflow-scroll">
                   <table className="table">
                     <thead className="thead-dark">
                       <tr>
@@ -241,7 +234,10 @@ const History = () => {
                       {order.products.map((p, i) => (
                         <tr key={i}>
                           <td>{p.product.title}</td>
-                          <td>{p.product.price}</td>
+                          <td>
+                            <span>&#8377;</span>
+                            {p.product.price}
+                          </td>
                           <td>{p.count}</td>
                           <td>{p.product.color}</td>
                           <td>
@@ -258,7 +254,10 @@ const History = () => {
                 </div>
                 <div className="row d-flex flex-row-reverse">
                   <div className="col-6 text-center">
-                    <div className="btn btn-primary disabled">
+                    <div
+                      className="btn btn-primary disabled"
+                      style={{ fontSize: "xx-small" }}
+                    >
                       <strong>Status : {order.ordderStatus}</strong>
                     </div>
                   </div>

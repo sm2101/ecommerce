@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import AdminNav from "../../Nav/AdminNav";
 import "react-datepicker/dist/react-datepicker.css";
+import { Card } from "antd";
 import {
   getCoupons,
   removeCoupon,
@@ -64,13 +65,13 @@ const CreateCoupon = () => {
   }, []);
   return (
     <div className="container-fluid">
-      <div className="row">
+      <div className="row d-flex justify-content-center">
         <div className="col-md-2">
           <AdminNav />
         </div>
         <div className="col-md-10">
           <h4 className="mt-4">{loading ? "Loading..." : "Coupons"}</h4>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="w-100">
             <div className="form-group">
               <div className="text-muted">Name</div>
               <input
@@ -105,33 +106,31 @@ const CreateCoupon = () => {
             <button className="btn btn-primary btn-block mt-3">Save</button>
           </form>
           <hr />
-          <table className="table table-bordered">
-            <thead className="thead-light">
-              <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Exipry</th>
-                <th scope="col">Discount %</th>
-                <th scope="col">Remove</th>
-              </tr>
-            </thead>
-            <tbody>
-              {coupons.map((c) => (
-                <tr key={c._id}>
-                  <td>{c.name}</td>
-                  <td>{new Date(c.expiry).toLocaleDateString()}</td>
-                  <td>{`${c.discount} %`}</td>
-                  <td>
+          <div className="row">
+            {coupons.map((c) => (
+              <div className="col-12 col-md-3">
+                <Card
+                  title={c.name}
+                  key={c._id}
+                  actions={[
                     <button
-                      className="btn btn-danger"
+                      className="btn btn-danger btn-block"
                       onClick={() => handleRemove(c._id)}
                     >
                       <DeleteOutlined />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </button>,
+                  ]}
+                >
+                  <div className="row d-flex justify-content-between">
+                    <div className="col-6">
+                      {`Expiry - ${new Date(c.expiry).toLocaleDateString()}`}
+                    </div>
+                    <div className="col-6 text-end">{`Discount - ${c.discount} %`}</div>
+                  </div>
+                </Card>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

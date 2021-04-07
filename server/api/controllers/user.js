@@ -3,7 +3,7 @@ const User = require("../models/user"),
   Cart = require("../models/cart"),
   Coupon = require("../models/coupon"),
   Order = require("../models/order");
-
+const uniqueid = require("uniqueid");
 exports.userCart = async (req, res) => {
   const { cart } = req.body;
   console.log(cart);
@@ -135,4 +135,74 @@ exports.getOrders = async (req, res) => {
     .populate("products.product")
     .exec();
   res.json(useOrders);
+};
+
+exports.addToWishlist = async (req, res) => {
+  const { productId } = req.body;
+  const user = await User.findOneAndUpdate(
+    { email: req.user.email },
+    { $addToSet: { wishlist: productId } },
+    { new: true }
+  ).exec();
+  res.json({
+    ok: true,
+  });
+};
+exports.getWishlist = async (req, res) => {
+  const list = await User.findOne({ email: req.user.email })
+    .select("wishlist")
+    .populate("wishlist")
+    .exec();
+
+  res.json(list);
+};
+exports.updateWishlist = async (req, res) => {
+  const { productId } = req.body;
+  const user = await User.findOneAndUpdate(
+    { email: req.user.email },
+    { $pull: { wishlist: productId } },
+    { new: true }
+  ).exec();
+  res.json({ ok: true });
+};
+exports.createCashOrder = async (req, res) => {
+  const { coupon } = req.body;
+  const user = await User.findOne({ email: req.user.email }).exec();
+
+  const cart = await Cart.findOne({ orderedBy: user._id }).exec();
+  let finalAmount = 0;
+  if (coupon && cart.totalAfterDiscount) {
+    finalAmount = Math.round(cart.totalAfterDiscount);
+  } else {
+    finalAmount = cart.cartTotal;
+  }
+  let order = await new Order({
+    products: cart.products,
+    paymentIntent: {
+      id: uniqueid(),
+      amount: finalAmount * 100,
+      currency: "inr",
+      status: "COD",
+      payment_method_types: ["Cash"],
+      created: Date.now(),
+    },
+    orderedBy: user._id,
+  }).save();
+  // decrement quantity incriment sold
+  let bulkOption = cart.products.map((item) => {
+    return {
+      updateOne: {
+        filter: {
+          _id: item.product._id,
+        },
+        update: {
+          $inc: { quantity: -item.count, sold: +item.count },
+        },
+      },
+    };
+  });
+  let updated = await Product.bulkWrite(bulkOption, {});
+  res.json({
+    ok: true,
+  });
 };

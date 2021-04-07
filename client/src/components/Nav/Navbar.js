@@ -1,90 +1,57 @@
-import React, {useState} from 'react'
-import {Menu, Badge} from 'antd';
-import { ShoppingCartOutlined ,UserOutlined ,UserAddOutlined, ShoppingOutlined, LogoutOutlined} from '@ant-design/icons';
-import {Link} from 'react-router-dom';
-import firebase from 'firebase';
-import {useDispatch, useSelector} from 'react-redux';
-import {useHistory} from 'react-router-dom';
-import { LOGOUT } from '../../Actions/types';
-import ProductSearchForm from '../Forms/ProductSearchForm'
-const { SubMenu } = Menu;
+import React, { useState } from "react";
+import LeftNav from "./LeftNav";
+import RightNav from "./RightNav";
+import { Drawer, Button } from "antd";
+import { Link } from "react-router-dom";
+import firebase from "firebase";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { LOGOUT } from "../../Actions/types";
 const Navbar = () => {
-  const [current, setCurrent] = useState("home");
+  const [visible, setVisible] = useState(false);
   const dispatch = useDispatch(),
-        history = useHistory(),
-        {user, cart} = useSelector((state)=>({...state}));
-        console.log(user);
-  const handleClick = e => {
-        setCurrent(e.key)
-      };
-  const logout = () =>{
-      firebase.auth().signOut();
-      dispatch({
-        type : LOGOUT,
-        payload:null
-      });
-      history.push('/');
-    }
-        return (
-              <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal" className = "my-nav">
-                <Menu.Item key="home">
-                <Link to = '/'>E-commerce</Link>
-                </Menu.Item>
-                <Menu.Item key="about">
-                <Link to = '/about'>About Us</Link>
-                </Menu.Item>
-                <Menu.Item key = "shop" icon = {<ShoppingOutlined />} >
-                  <Link to = "/shop">Shop</Link>
-                </Menu.Item>
-                {/* <SubMenu title="Shop" icon = {<ShoppingOutlined />} key = "shop">
-                  <Menu.ItemGroup title="Item 1">
-                    <Menu.Item key="shop-item-1">Option 1</Menu.Item>
-                    <Menu.Item key="shop-item-2">Option 2</Menu.Item>
-                  </Menu.ItemGroup>
-                  <Menu.ItemGroup title="Item 2">
-                    <Menu.Item key="shop-item-3">Option 3</Menu.Item>
-                    <Menu.Item key="shop-item-4">Option 4</Menu.Item>
-                  </Menu.ItemGroup>
-                </SubMenu> */}
-                {!user && (
-                  <>
-                    <Menu.Item key="Register" icon = {<UserAddOutlined />} className = "float-end" >
-                      <Link to = '/register'>Register</Link>
-                    </Menu.Item>
-                    <Menu.Item key="Login" icon = {<UserOutlined />} className = "float-end">
-                      <Link to = '/login'>Login</Link>
-                    </Menu.Item>
-                  </>
-                )}
-                {user &&(
-                  <SubMenu title={user.name?user.name:user.email} className = "float-end">
-                    {user.role === 'admin'&&(
-                      <Menu.Item key="setting:1"><Link to ='/admin/dashboard'>Dashboard</Link></Menu.Item>
-                    )}
-
-                    {user.role === 'Customer'&&(
-                      <>
-                      <Menu.Item key="setting:1"><Link to ='/user/history'>History</Link></Menu.Item>
-                      <Menu.Item key="setting:2"><Link to ='/user/password'>Change Password</Link></Menu.Item>
-                      <Menu.Item key="setting:3"><Link to ='/user/wishlist'>Wishlist</Link></Menu.Item>
-                      </>
-                    )}
-
-                    <Menu.Item key="setting:4" icon = {<LogoutOutlined />} onClick = {logout}>Logout</Menu.Item>
-                </SubMenu>
-                )}
-                <Menu.Item key="Cart" icon = {<ShoppingCartOutlined />} className = "float-end">
-                  <Link to = '/cart'>
-                    <Badge count = {cart.length} offset = {[9,0]}>
-                      Cart
-                    </Badge>
-                  </Link>
-                </Menu.Item>
-                <Menu.Item>
-                  <ProductSearchForm setCurrent = {setCurrent} />
-                </Menu.Item>
-              </Menu>
-            );
-    }
+    history = useHistory(),
+    { user, cart } = useSelector((state) => ({ ...state }));
+  const logout = () => {
+    firebase.auth().signOut();
+    dispatch({
+      type: LOGOUT,
+      payload: null,
+    });
+    history.push("/");
+  };
+  return (
+    <nav className="menuBar w-100 menubar-dark">
+      <div className="logo">
+        <Link to="/">Ecom</Link>
+      </div>
+      <div className="menuCon">
+        <div className="leftMenu d-none d-lg-block">
+          <LeftNav />
+        </div>
+        <div className="rightMenu d-none d-lg-block">
+          <RightNav user={user} cart={cart} logout={logout} />
+        </div>
+        <Button
+          className="barsMenu d-block d-lg-none "
+          type="primary"
+          onClick={() => setVisible(true)}
+        >
+          <span className="barsBtn"></span>
+        </Button>
+        <Drawer
+          title="Navigation Menu"
+          placement="right"
+          closable={false}
+          onClose={() => setVisible(false)}
+          visible={visible}
+        >
+          <LeftNav />
+          <RightNav user={user} cart={cart} logout={logout} />
+        </Drawer>
+      </div>
+    </nav>
+  );
+};
 
 export default Navbar;

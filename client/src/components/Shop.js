@@ -3,11 +3,12 @@ import { getProducts, getProductsFilter } from "../Functions/products";
 import { useDispatch, useSelector } from "react-redux";
 import UserProductCard from "../components/cards/UserProductCard";
 import SkeletonCard from "../components/cards/SkeletonCard";
-import { Menu, Slider, Checkbox } from "antd";
+import { Menu, Slider, Checkbox, Drawer } from "antd";
 import {
   MoneyCollectTwoTone,
   DownSquareOutlined,
   StarOutlined,
+  FilterOutlined,
 } from "@ant-design/icons";
 import { SEARCH_QUERY } from "../Actions/types";
 import { getAllCategories } from "../Functions/category";
@@ -24,7 +25,8 @@ const Shop = () => {
     [subCategories, setSubCateories] = useState([]),
     [selectedSub, setSelectedSub] = useState(""),
     [star, setStar] = useState(""),
-    [shipping, setShipping] = useState("");
+    [shipping, setShipping] = useState(""),
+    [visible, setVisible] = useState(false);
 
   const { search } = useSelector((state) => ({ ...state }));
   const { text } = search;
@@ -205,65 +207,95 @@ const Shop = () => {
       </Checkbox>
     </div>
   );
+  const renderMenu = () => (
+    <Menu
+      mode="inline"
+      defaultOpenKeys={["slider", "category", "stars", "subs", "shipping"]}
+    >
+      {/* price */}
+      <SubMenu
+        key="slider"
+        title="Price"
+        className="p-3"
+        icon={<MoneyCollectTwoTone />}
+      >
+        <div>
+          <Slider
+            className="mx-4"
+            tipFormatter={(v) => `Rs.${v}`}
+            range
+            max="100000"
+            value={price}
+            onChange={handleSlider}
+          />
+        </div>
+      </SubMenu>
+      {/* Categoris */}
+      <SubMenu
+        key="category"
+        title="Category"
+        className="p-3"
+        icon={<DownSquareOutlined />}
+      >
+        {showCategories()};
+      </SubMenu>
+      {/* Stars */}
+      <SubMenu
+        key="stars"
+        className="p-3"
+        title="Ratings"
+        icon={<StarOutlined />}
+      >
+        {showStars()}
+      </SubMenu>
+      {/* subCategory */}
+      <SubMenu
+        key="subs"
+        title="Sub Categories"
+        className="p-3"
+        icon={<DownSquareOutlined />}
+      >
+        {showSubs()}
+      </SubMenu>
+      {/* shipping */}
+      <SubMenu
+        key="shipping"
+        title="Shipping"
+        className="p-3"
+        icon={<DownSquareOutlined />}
+      >
+        {showShipping()}
+      </SubMenu>
+    </Menu>
+  );
   return (
     <div className="container-fluid">
-      <div className="row">
+      <div className="row mt-3">
+        <button
+          className="btn btn-outline-primary btn-block d-block d-md-none"
+          onClick={() => setVisible(true)}
+        >
+          Filter <FilterOutlined />
+        </button>
         <div className="col-md-3">
-          <h4 className="text-center">Filter</h4>
-          <Menu
-            mode="inline"
-            defaultOpenKeys={[
-              "slider",
-              "category",
-              "stars",
-              "subs",
-              "shipping",
-            ]}
+          <div className="d-none d-md-block mt-5">
+            <h4 className="text-center">
+              Filter <FilterOutlined />{" "}
+            </h4>
+            {renderMenu()}
+          </div>
+          <Drawer
+            height="70vh"
+            visible={visible}
+            onClose={() => setVisible(false)}
+            closable={false}
+            title="Filters"
+            placement="bottom"
           >
-            {/* price */}
-            <SubMenu key="slider" title="Price" icon={<MoneyCollectTwoTone />}>
-              <div>
-                <Slider
-                  className="mx-4"
-                  tipFormatter={(v) => `Rs.${v}`}
-                  range
-                  max="100000"
-                  value={price}
-                  onChange={handleSlider}
-                />
-              </div>
-            </SubMenu>
-            {/* Categoris */}
-            <SubMenu
-              key="category"
-              title="Category"
-              icon={<DownSquareOutlined />}
-            >
-              {showCategories()};
-            </SubMenu>
-            {/* Stars */}
-            <SubMenu key="stars" title="Ratings" icon={<StarOutlined />}>
-              {showStars()}
-            </SubMenu>
-            {/* subCategory */}
-            <SubMenu
-              key="subs"
-              title="Sub Categories"
-              icon={<DownSquareOutlined />}
-            >
-              {showSubs()}
-            </SubMenu>
-            {/* shipping */}
-            <SubMenu
-              key="shipping"
-              title="Shipping"
-              icon={<DownSquareOutlined />}
-            >
-              {showShipping()}
-            </SubMenu>
-          </Menu>
+            {renderMenu()}
+          </Drawer>
         </div>
-        <div className="col-md-9">
+        <div className="col-md-9 my-3">
           {loading ? (
             <SkeletonCard count={6} />
           ) : (
@@ -271,7 +303,7 @@ const Shop = () => {
               {products.length < 1 && <p>No products found</p>}
               {products.map((p) => (
                 <div className="col-12 col-md-6 col-lg-3" key={p._id}>
-                  <UserProductCard product={p} />
+                  <UserProductCard product={p} wishlist={true} />
                 </div>
               ))}
             </div>

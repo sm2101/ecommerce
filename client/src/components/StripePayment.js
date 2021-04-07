@@ -6,6 +6,7 @@ import { createOrder, emptyCart } from "../Functions/user";
 import { Card } from "antd";
 import { ADD_TO_CART, ADD_COUPON } from "../Actions/types";
 import { DollarCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
+import { useHistory } from "react-router-dom";
 const cardStyle = {
   style: {
     base: {
@@ -23,7 +24,7 @@ const cardStyle = {
     },
   },
 };
-const StripePayment = ({ history }) => {
+const StripePayment = () => {
   const [success, setSuccess] = useState(false),
     [error, setErroe] = useState(null),
     [processing, setProccesing] = useState(""),
@@ -36,7 +37,7 @@ const StripePayment = ({ history }) => {
   const elements = useElements();
   const dispatch = useDispatch();
   const { user, coupon } = useSelector((state) => ({ ...state }));
-
+  const history = useHistory();
   const handleSubmit = async (e) => {
     e.preventDefault();
     setProccesing(true);
@@ -68,7 +69,9 @@ const StripePayment = ({ history }) => {
             payload: false,
           });
           // from db
-          emptyCart(user.token).then((res) => {});
+          emptyCart(user.token).then((res) => {
+            history.push("/user/history");
+          });
         }
       });
       setErroe(null);
@@ -94,7 +97,7 @@ const StripePayment = ({ history }) => {
       });
   }, []);
   return (
-    <>
+    <div className="card p-4" style={{ width: "30rem", maxHeight: "75vh" }}>
       {!success && (
         <div className="text-center">
           {coupon === true ? (
@@ -142,7 +145,16 @@ const StripePayment = ({ history }) => {
           </div>
         )}
       </form>
-    </>
+      <p className="text-muted text-center">
+        The Payment is made through{" "}
+        <a href="https://stripe.com/en-in" target="_blank">
+          Stripe
+        </a>
+        .
+        <br /> Since this is not an real app please use the details provided
+        above for a successful Transaction
+      </p>
+    </div>
   );
 };
 
